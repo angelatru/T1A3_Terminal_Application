@@ -6,7 +6,6 @@ try:
     # open the file in read mode
     todo_file = open(file_name, "r")
     todo_file.close()
-    print("In try block")
     # if it throws error, it means the file doesn't exist
     # if no error, it means the file exist
 except FileNotFoundError:
@@ -16,7 +15,6 @@ except FileNotFoundError:
     # We can also insert the first line into the file
     todo_file.write("Name,Company,Gender,TopNotes,MiddleNotes,BaseNotes\n")
     todo_file.close()
-    print("In except block")
 
 print("Welcome to you perfume tracker! Visit Fragrantica at https://www.fragrantica.com/ to find out your perfume's notes")
 
