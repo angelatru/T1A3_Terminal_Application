@@ -34,8 +34,49 @@ def remove_perfume(file_name):
 
 
 # Modify function
-def edit_perfume():
-    pass
+def edit_perfume(file_name):
+    # Empy list for new information
+    updated_rows = []
+    # Enter the name of the perfume user wants to edit and which of the details within the perfume user wants to edit
+    edit_perfume_name = input("Enter the name of the perfume which details you want to change?: ")
+    edit_perfume_target = input("Which section did you want to edit? (Name, Company, Gender, TopNotes, MiddleNotes, or BaseNotes)?: ")
+    # Perfume categories
+    perfume_categories = ['Name', 'Company', 'Gender', 'TopNotes', 'MiddleNotes', 'BaseNotes']
+    
+    try:
+        # Finding index value of input target
+        index_value = perfume_categories.index(edit_perfume_target)
+    except ValueError:
+        print("Invalid category entered. Please try selection 3 again.")
+        return
+    
+    # This is to track is the perfume is in the list of collection
+    perfume_found = False
+
+    with open(file_name, "r") as f:
+        reader = csv.reader(f)
+        for row in reader:
+            if row[0] == edit_perfume_name:
+                print(f"Current details: {row[index_value]}")
+                new_value = input(f"Enter new {edit_perfume_target}: ")
+
+                # Update the specific field based on user input
+                row[index_value] = new_value
+            
+            # Append new information 
+            updated_rows.append(row)
+
+    # While iterating over the CSV, is the perfume is not found, prints statement
+    if not perfume_found:
+        print(f"The perfume '{edit_perfume_name}' is not found in your collection. Please ensure the spelling is correct!")
+        return
+    
+    with open(file_name, "w") as f:
+        writer = csv.writer(f)
+        writer.writerows(updated_rows)
+                
+
+
 
 # View function
 def view_perfume(file_name):
