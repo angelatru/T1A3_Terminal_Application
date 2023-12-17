@@ -20,6 +20,9 @@ def add_perfume(file_name):
 
 # Remove function
 def remove_perfume(file_name):
+    view_option = input("Would you like to view your perfumes? y/n: ")
+    if view_option == 'y':
+        view_perfume()
     perfume_name = input("Enter the name of the perfume that you want to remove: ")
     new_perfume_list = []
 
@@ -115,16 +118,18 @@ def view_perfume(file_name):
 
 # Recommendation function
 def popular_list(gender_preferences):
+    # For those who are not well-versed in perfume notes
+    # Sets of popular gendered notes
     feminine_popular = ('Bergamot','Lavender','Vanilla','Amber','Musk','Patchouli','Rose','Musk','Neroli','Ylang-Ylang','Jasmine')
     masculine_popular = ('Lavender','Sage','Rosemary','Anise','Cedarwood','Tabacco','Cinnamon','Leather','Mint','Nutmeg','Bergamot')
     unisex_popular = ('Lavender','Mandarin','Sandalwood','Papyrus','Basil','Ginger','Patchouli','Rosemary','Violet','Heliotrope')
 
     if gender_preferences == 'feminine':
-        print(feminine_popular)
+        print(f"Here are some popular feminine notes if you need some help!: {', '.join(feminine_popular)}")
     elif gender_preferences == 'masculine':
-        print(masculine_popular)
+        print(f"Here are some popular masculine notes if you need some help!: {', '.join(masculine_popular)}")
     elif gender_preferences == 'unisex':
-        print(unisex_popular)
+        print(f"Here are some popular unisex notes if you need some help!: {', '.join(unisex_popular)}")
             
 def rec_perfume(file_recommend):
     # Enter qualities of perfume user would like
@@ -132,12 +137,14 @@ def rec_perfume(file_recommend):
     recommendations = []
 
     gender_preferences = input("What gender would you like your perfume to lean towards (feminine, masculine, or unisex)?: ")
+    popular_list(gender_preferences)
     notes_preferences = input("What notes would you like your perfume to have (please seperate by '/')?: ")
     notes_preferences = notes_preferences.lower().split('/')
     
+    # Whether the user wants to find perfume notes inclusive or exclusive
     inclusive_option = input("Choose whether the perfume notes are INCLUSIVE (any of the notes provided) or EXCLUSIVE (all of the notes provided): ").lower()
 
-    # Due to weird latin letters, requires encoding change for this function to read the CSV 
+    # Due to weird latin letters, requires encoding change for this function to read the rec list CSV in particular
     with open(file_recommend, "r", encoding='ISO-8859-1') as f:
         reader = csv.reader(f)
         for row in reader:
@@ -161,7 +168,7 @@ def rec_perfume(file_recommend):
     
     # If there are recommendations found in the tuple
     if recommendations:
-        # Generates how many outputs the user wouldl ike
+        # Generates how many outputs the user would like
         num_input = input("How many recommendations would you like?: ")
         print("Here are some perfumes based on your preferences:")
         # Count is used to number the outputs - readability
