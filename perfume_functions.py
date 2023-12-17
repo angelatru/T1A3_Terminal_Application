@@ -1,4 +1,5 @@
 import csv
+import random
 
 # Add function
 def add_perfume(file_name):
@@ -21,16 +22,29 @@ def add_perfume(file_name):
 def remove_perfume(file_name):
     perfume_name = input("Enter the name of the perfume that you want to remove: ")
     new_perfume_list = []
+
+    # Track perfume to see if user input is found in collection
+    perfume_found = False
+
     with open(file_name, "r") as f:
         reader = csv.reader(f)
         for row in reader:
             if (perfume_name != row[0]):
                 new_perfume_list.append(row)
+            else:
+                perfume_found = True
+    
+    # Code block if perfume is already removed from the collection (not found) or does exist and has been removed.
+    if not perfume_found:
+        print(f"There is no '{perfume_name}' in your collection.")
+    else:
+        print(f"The perfume '{perfume_name}' was removed.")
+
     with open(file_name, "w") as f:
         writer = csv.writer(f)
         writer.writerows(new_perfume_list)
     
-    print(f"{perfume_name} was removed.")
+    
 
 
 # Modify function
@@ -100,5 +114,70 @@ def view_perfume(file_name):
 
 
 # Recommendation function
-def rec_perfume():
-    pass
+def popular_list(gender_preferences):
+    feminine_popular = ('Bergamot','Lavender','Vanilla','Amber','Musk','Patchouli','Rose','Musk','Neroli','Ylang-Ylang','Jasmine')
+    masculine_popular = ('Lavender','Sage','Rosemary','Anise','Cedarwood','Tabacco','Cinnamon','Leather','Mint','Nutmeg','Bergamot')
+    unisex_popular = ('Lavender','Mandarin','Sandalwood','Papyrus','Basil','Ginger','Patchouli','Rosemary','Violet','Heliotrope')
+
+    if gender_preferences == 'feminine':
+        print(feminine_popular)
+    elif gender_preferences == 'masculine':
+        print(masculine_popular)
+    elif gender_preferences == 'unisex':
+        print(unisex_popular)
+            
+def rec_perfume(file_recommend):
+    # Enter qualities of perfume user would like
+        # gender, topnotes, middlenotes, basenotes
+    recommendations = []
+
+    gender_preferences = input("What gender would you like your perfume to lean towards (feminine, masculine, or unisex)?: ")
+    notes_preferences = input("What notes would you like your perfume to have (please seperate by '/')?: ")
+    notes_preferences = notes_preferences.lower().split('/')
+    
+    inclusive_option = input("Choose whether the perfume notes are INCLUSIVE (any of the notes provided) or EXCLUSIVE (all of the notes provided): ").lower()
+
+    # Due to weird latin letters, requires encoding change for this function to read the CSV 
+    with open(file_recommend, "r", encoding='ISO-8859-1') as f:
+        reader = csv.reader(f)
+        for row in reader:
+            # Get the gender of each perfume
+            perfume_gender = row[2].lower()
+            # Combine all scent notes and split 
+            perfume_attributes = row[3].lower() + '/' + row[4].lower() + '/' + row[5].lower()
+            perfume_attributes = perfume_attributes.split('/')
+
+            # Check for inclusive OR (any of the specified notes)
+            if inclusive_option == 'inclusive':
+                if any(note in perfume_attributes for note in notes_preferences) and perfume_gender == gender_preferences:
+                    perfume_info = (row[0], row[1], row[3], row[4], row[5])
+                    recommendations.append(perfume_info)
+            
+            # Check for exclusive AND (all of the specified notes)
+            elif inclusive_option == 'exclusive':
+                if all(note in perfume_attributes for note in notes_preferences) and perfume_gender == gender_preferences:
+                    perfume_info = (row[0], row[1], row[3], row[4], row[5])
+                    recommendations.append(perfume_info)
+    
+    # If there are recommendations found in the tuple
+    if recommendations:
+        # Generates how many outputs the user wouldl ike
+        num_input = input("How many recommendations would you like?: ")
+        print("Here are some perfumes based on your preferences:")
+        # Count is used to number the outputs - readability
+        count = 1
+        # Getting random recommendations, for some fun
+        num_recommendations = min(int(num_input), len(recommendations))
+        random_recommendations = random.sample(recommendations, num_recommendations)
+        for perfume in random_recommendations:
+            print(f" {count}. {perfume[0]} by {perfume[1]}")
+            print(f"Top Notes: {perfume[2]}")
+            print(f"Middle Notes: {perfume[3]}")
+            print(f"Base Notes: {perfume[4]}")
+            print("------------------------------")
+
+            count += 1
+    else:
+        print("Sorry, there are no recommendations that suit your preferences.")
+    
+

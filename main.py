@@ -1,6 +1,7 @@
 from perfume_functions import add_perfume, remove_perfume, edit_perfume, view_perfume, rec_perfume
 
 file_name = "your_perfume_list.csv"
+file_recommend = "perfume_rec_list.csv"
 
 try:
     # open the file in read mode
@@ -42,7 +43,7 @@ while users_choice != "6":
         view_perfume(file_name)
     elif (users_choice == "5"):
         #recommend perfume from existing list
-        rec_perfume(file_name)
+        rec_perfume(file_recommend)
     elif (users_choice == "6"):
         continue
     else:
