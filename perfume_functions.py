@@ -15,11 +15,10 @@ def add_perfume(file_name):
         # Insert values of name, brand, gender, and tiered notes
         writer.writerow([perfume_name, perfume_company, perfume_gender, perfume_topnotes, perfume_middlenotes, perfume_basenotes])
 
-    print(f"{perfume_name} was added to your perfume collection.")
+    print(f"{perfume_name} by {perfume_company} was added to your perfume collection.")
 
 # Remove function
 def remove_perfume(file_name):
-    print("Remove todo")
     perfume_name = input("Enter the name of the perfume that you want to remove: ")
     new_perfume_list = []
     with open(file_name, "r") as f:
@@ -30,6 +29,8 @@ def remove_perfume(file_name):
     with open(file_name, "w") as f:
         writer = csv.writer(f)
         writer.writerows(new_perfume_list)
+    
+    print(f"{perfume_name} was removed.")
 
 
 # Modify function
@@ -37,8 +38,25 @@ def edit_perfume():
     pass
 
 # View function
-def view_perfume():
-    pass
+def view_perfume(file_name):
+    print("Here is your list of perfumes")
+    print("------------------------------")
+    # Number the list of perfumes
+    count = 1
+    # Open CSV and show details of each row
+    with open(file_name, "r") as f:
+        reader = csv.reader(f)
+        reader.__next__()
+        for row in reader:
+            print(f"{count}.")
+            print(f"{row[0]} by {row[1]} ({row[2]})")
+            print(f"Top Notes: {row[3]}")
+            print(f"Middle Notes: {row[4]}")
+            print(f"Base Notes: {row[5]}")
+            print("------------------------------")
+
+            count += 1
+
 
 # Recommendation function
 def rec_perfume():
