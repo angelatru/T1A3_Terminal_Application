@@ -3,7 +3,7 @@ import random
 
 # Add function
 def add_perfume(file_name):
-    print("Add a perfume! Visit Fragrantica at https://www.fragrantica.com/ to see you perfume details.")
+    print("Add a perfume! Visit Fragrantica at https://www.fragrantica.com/ to see your perfume details.")
     perfume_name = input("Enter the name of the perfume: ")
     perfume_company = input("Enter the brand of the perfume: ")
     perfume_gender = input("Enter the gender of the perfume (feminine, masculine, unisex): ")
@@ -20,10 +20,12 @@ def add_perfume(file_name):
 
 # Remove function
 def remove_perfume(file_name):
+    # Ask if user wants to view list to get the name of perfume to be removed
     view_option = input("Would you like to view your perfumes? y/n: ")
     if view_option == 'y':
         view_perfume()
     perfume_name = input("Enter the name of the perfume that you want to remove: ")
+
     new_perfume_list = []
 
     # Track perfume to see if user input is found in collection
@@ -54,18 +56,21 @@ def remove_perfume(file_name):
 def edit_perfume(file_name):
     # Empy list for new information
     updated_rows = []
-    # Enter the name of the perfume user wants to edit and which of the details within the perfume user wants to edit
-    edit_perfume_name = input("Enter the name of the perfume which details you want to change?: ")
-    edit_perfume_target = input("Which section did you want to edit? (Name, Company, Gender, TopNotes, MiddleNotes, or BaseNotes)?: ")
+
     # Perfume categories
     perfume_categories = ['Name', 'Company', 'Gender', 'TopNotes', 'MiddleNotes', 'BaseNotes']
-    
+
+    edit_perfume_target = input("Which section did you want to edit? (Name, Company, Gender, TopNotes, MiddleNotes, or BaseNotes)?: ")
+
     try:
         # Finding index value of input target
         index_value = perfume_categories.index(edit_perfume_target)
     except ValueError:
-        print("Invalid category entered. Please try selection 3 again.")
-        return
+        print("Invalid category entered. Please try again.")
+        return edit_perfume(file_name)
+    
+    # Enter the name of the perfume user wants to edit and which of the details within the perfume user wants to edit
+    edit_perfume_name = input("Enter the name of the perfume which details you want to change?: ")
     
     # This is to track is the perfume is in the list of collection
     perfume_found = False
@@ -76,9 +81,10 @@ def edit_perfume(file_name):
             if row[0] == edit_perfume_name:
                 print(f"Current details: {row[index_value]}")
                 new_value = input(f"Enter new {edit_perfume_target}: ")
-
                 # Update the specific field based on user input
                 row[index_value] = new_value
+            # else:
+            #     perfume_found = True
             
             # Append new information 
             updated_rows.append(row)
@@ -86,7 +92,8 @@ def edit_perfume(file_name):
     # While iterating over the CSV, is the perfume is not found, prints statement
     if not perfume_found:
         print(f"The perfume '{edit_perfume_name}' is not found in your collection. Please ensure the spelling is correct!")
-        return
+    # else:
+    #     print(f"'{edit_perfume_name}' {edit_perfume_target} has been successfully changed.")
     
     with open(file_name, "w") as f:
         writer = csv.writer(f)
