@@ -5,7 +5,9 @@ import random
 feminine_popular = {'Bergamot','Lavender','Vanilla','Amber','Musk','Patchouli','Rose','Musk','Neroli','Ylang-Ylang','Jasmine'}
 masculine_popular = {'Lavender','Sage','Rosemary','Anise','Cedarwood','Tabacco','Cinnamon','Leather','Mint','Nutmeg','Bergamot'}
 unisex_popular = {'Lavender','Mandarin','Sandalwood','Papyrus','Basil','Ginger','Patchouli','Rosemary','Violet','Heliotrope'}
+
 gender_list = ['feminine', 'masculine', 'unisex']
+perfume_categories = ['Name', 'Company', 'Gender', 'TopNotes', 'MiddleNotes', 'BaseNotes']
 
 def view_perfume_option(file_name):
     view_option = input("Would you like to view your perfumes? Enter 'y', otherwise enter to continue: ")
@@ -27,7 +29,7 @@ def add_perfume(file_name):
         # Insert values of name, brand, gender, and tiered notes
         writer.writerow([perfume_name, perfume_company, perfume_gender, perfume_topnotes, perfume_middlenotes, perfume_basenotes])
 
-    print(f"{perfume_name} by {perfume_company} was added to your perfume collection.")
+    print(f"'{perfume_name}' by {perfume_company} was added to your perfume collection.")
 
 # Remove function
 def remove_perfume(file_name):
@@ -70,20 +72,17 @@ def edit_perfume(file_name):
     # Empy list for new information
     updated_rows = []
 
-    # Perfume categories
-    perfume_categories = ['Name', 'Company', 'Gender', 'TopNotes', 'MiddleNotes', 'BaseNotes']
-
+    # Enter the name of the perfume user wants to edit and which of the details within the perfume user wants to edit
+    edit_perfume_name = input("Enter the name of the perfume which details you want to change?: ")
     edit_perfume_target = input("Which section did you want to edit? (Name, Company, Gender, TopNotes, MiddleNotes, or BaseNotes)?: ")
 
     try:
         # Finding index value of input target
         index_value = perfume_categories.index(edit_perfume_target)
     except ValueError:
-        print("Invalid category entered. Please try again.")
+        print("Invalid category entered. Please enter exactly the options provided.")
         return edit_perfume(file_name)
     
-    # Enter the name of the perfume user wants to edit and which of the details within the perfume user wants to edit
-    edit_perfume_name = input("Enter the name of the perfume which details you want to change?: ")
     
     # This is to track is the perfume is in the list of collection
     perfume_found = False
@@ -184,14 +183,14 @@ def rec_perfume(file_recommend):
                     recommendations.append(perfume_info)
             
     
-    # If there are recommendations found in the tuple
+    # If there are recommendations found in the list
     if recommendations:
         # Generates how many outputs the user would like
         num_input = input("How many recommendations would you like?: ")
         print("Here are some perfumes based on your preferences:")
         # Count is used to number the outputs - readability
         count = 1
-        # Getting random recommendations, for some  :)
+        # Getting random recommendations, make it more fun  :)
         num_recommendations = min(int(num_input), len(recommendations))
         random_recommendations = random.sample(recommendations, num_recommendations)
         for perfume in random_recommendations:
