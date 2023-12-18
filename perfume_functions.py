@@ -7,11 +7,16 @@ masculine_popular = {'Lavender','Sage','Rosemary','Anise','Cedarwood','Tabacco',
 unisex_popular = {'Lavender','Mandarin','Sandalwood','Papyrus','Basil','Ginger','Patchouli','Rosemary','Violet','Heliotrope'}
 gender_list = ['feminine', 'masculine', 'unisex']
 
+def view_perfume_option(file_name):
+    view_option = input("Would you like to view your perfumes? Enter 'y', otherwise enter to continue: ")
+    if view_option == 'y':
+        view_perfume(file_name)
+
 # Add function
 def add_perfume(file_name):
     print("Add a perfume! Visit Fragrantica at https://www.fragrantica.com/ to see your perfume details.")
     perfume_name = input("Enter the name of the perfume: ")
-    perfume_company = input("Enter the brand of the perfume: ")
+    perfume_company = input("Enter the brand/comapny/creator of the perfume: ")
     perfume_gender = input("Enter the gender of the perfume (feminine, masculine, unisex): ")
     perfume_topnotes = input("Enter the TOP notes seperated by a '/' (eg. vanilla/burbon): ")
     perfume_middlenotes = input("Enter the MIDDLE notes seperated by a '/' (eg. vanilla/burbon): ")
@@ -27,9 +32,7 @@ def add_perfume(file_name):
 # Remove function
 def remove_perfume(file_name):
     # Ask if user wants to view list to get the name of perfume to be removed
-    view_option = input("Would you like to view your perfumes? Enter 'y', otherwise continue: ")
-    if view_option == 'y':
-        view_perfume(file_name)
+    view_perfume_option(file_name)
 
     perfume_name = input("Enter the name of the perfume that you want to remove: ")
 
@@ -62,6 +65,8 @@ def remove_perfume(file_name):
 
 # Modify function
 def edit_perfume(file_name):
+    view_perfume_option(file_name)
+
     # Empy list for new information
     updated_rows = []
 
@@ -91,17 +96,16 @@ def edit_perfume(file_name):
                 new_value = input(f"Enter new {edit_perfume_target}: ")
                 # Update the specific field based on user input
                 row[index_value] = new_value
-            # else:
-            #     perfume_found = True
-            
+                perfume_found = True
+                 
             # Append new information 
             updated_rows.append(row)
 
     # While iterating over the CSV, is the perfume is not found, prints statement
     if not perfume_found:
-        print(f"The perfume '{edit_perfume_name}' is not found in your collection. Please ensure the spelling is correct!")
-    # else:
-    #     print(f"'{edit_perfume_name}' {edit_perfume_target} has been successfully changed.")
+        print(f"Perfume not found in your collection. Please ensure the spelling is correct!")
+    else:
+        print(f"The {edit_perfume_target} for '{edit_perfume_name}' has been successfully changed.")
     
     with open(file_name, "w") as f:
         writer = csv.writer(f)
@@ -150,7 +154,7 @@ def rec_perfume(file_recommend):
     elif gender_preferences == gender_list[2]:
         print(f"Here are some popular unisex notes if you need some help!: {', '.join(unisex_popular)}")
 
-
+    # Create a list of user notes preferences
     notes_preferences = input("What notes would you like your perfume to have (please seperate by '/')?: ")
     notes_preferences = notes_preferences.lower().split('/')
     
@@ -187,7 +191,7 @@ def rec_perfume(file_recommend):
         print("Here are some perfumes based on your preferences:")
         # Count is used to number the outputs - readability
         count = 1
-        # Getting random recommendations, for some fun
+        # Getting random recommendations, for some  :)
         num_recommendations = min(int(num_input), len(recommendations))
         random_recommendations = random.sample(recommendations, num_recommendations)
         for perfume in random_recommendations:
