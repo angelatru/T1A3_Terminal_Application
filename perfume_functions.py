@@ -21,9 +21,10 @@ def add_perfume(file_name):
 # Remove function
 def remove_perfume(file_name):
     # Ask if user wants to view list to get the name of perfume to be removed
-    view_option = input("Would you like to view your perfumes? y/n: ")
+    view_option = input("Would you like to view your perfumes? Enter 'y', otherwise continue: ")
     if view_option == 'y':
-        view_perfume()
+        view_perfume(file_name)
+
     perfume_name = input("Enter the name of the perfume that you want to remove: ")
 
     new_perfume_list = []
@@ -31,10 +32,11 @@ def remove_perfume(file_name):
     # Track perfume to see if user input is found in collection
     perfume_found = False
 
+    # Remove perfume if user input is the same as the name of the perfume in the list
     with open(file_name, "r") as f:
         reader = csv.reader(f)
         for row in reader:
-            if (perfume_name != row[0]):
+            if perfume_name != row[0]:
                 new_perfume_list.append(row)
             else:
                 perfume_found = True
@@ -130,6 +132,12 @@ def popular_list(gender_preferences):
     feminine_popular = ('Bergamot','Lavender','Vanilla','Amber','Musk','Patchouli','Rose','Musk','Neroli','Ylang-Ylang','Jasmine')
     masculine_popular = ('Lavender','Sage','Rosemary','Anise','Cedarwood','Tabacco','Cinnamon','Leather','Mint','Nutmeg','Bergamot')
     unisex_popular = ('Lavender','Mandarin','Sandalwood','Papyrus','Basil','Ginger','Patchouli','Rosemary','Violet','Heliotrope')
+
+    while True:
+        gender_preferences = input("What gender would you like your perfume to lean towards (feminine, masculine, or unisex)?: ").lower()
+        if gender_preferences in ['feminine', 'masculine', 'unisex']:
+            break  # Break the loop if the input is one of the selections
+        print("Please enter one of the three options.")
 
     if gender_preferences == 'feminine':
         print(f"Here are some popular feminine notes if you need some help!: {', '.join(feminine_popular)}")
